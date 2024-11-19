@@ -4,8 +4,9 @@ const mongoose=require('mongoose')
 const doctorRoutes=require('./routes/doctorRoutes')
 const patientRoutes=require('./routes/patientRoutes')
 const adminRoutes = require('./routes/adminRoutes'); 
-
+const cors=require('cors')
 dotenv.config();
+
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
@@ -17,6 +18,15 @@ mongoose.connect(process.env.MONGO_URI)
 
 
 const app = express();
+
+app.use('/uploads', express.static('uploads'));
+
+app.use(cors({
+  origin: 'http://localhost:3000', // Replace with your frontend's URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
+
 app.use(express.json());
 
 app.use('/api/doctor', doctorRoutes);
